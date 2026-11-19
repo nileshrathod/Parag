@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Update the Sitemap URL below after configuring your final GitHub Pages or custom domain URL.
+Sitemap: ./sitemap.xml
