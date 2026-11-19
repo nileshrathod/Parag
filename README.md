@@ -23,13 +23,12 @@ Key architectural characteristics:
 
 ## Prerequisites
 
-- **Node.js** 20+ (Node 22 recommended, matching the GitHub Actions workflow)
-- **npm** 10+
+- **Bun** 1.4+ (matches `bun.lock` lockfile format and the GitHub Actions workflow)
 
 ## Local Installation
 
 ```bash
-npm install
+bun install
 ```
 
 ## Development Commands
@@ -37,13 +36,13 @@ npm install
 Start the local development server on port `3000`:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Run TypeScript typechecking and lint validation:
 
 ```bash
-npm run lint
+bun run lint
 ```
 
 ## Production Build
@@ -51,20 +50,20 @@ npm run lint
 Build the optimized static bundle into `dist/`:
 
 ```bash
-npm run build
+bun run build
 ```
 
 Preview the production build locally:
 
 ```bash
-npm run preview
+bun run preview
 ```
 
 To test a GitHub Pages project subpath build locally (replace `your-repo-name` with your repository name):
 
 ```bash
-VITE_BASE_PATH="/your-repo-name/" npm run build
-npm run preview
+VITE_BASE_PATH="/your-repo-name/" bun run build
+bun run preview
 ```
 
 ## GitHub Repository Setup
@@ -87,10 +86,11 @@ git push -u origin main
 2. Under **Build and deployment → Source**, select **GitHub Actions**.
 3. Push to `main` (or open the **Actions** tab and trigger **Deploy ShivShilp Website to GitHub Pages** manually via `workflow_dispatch`).
 4. The workflow in `.github/workflows/deploy.yml` will automatically:
-   - Install dependencies with `npm ci`
-   - Run `npm run lint`
+   - Set up Bun via `oven-sh/setup-bun@v2`
+   - Install dependencies from `bun.lock` with `bun install --frozen-lockfile`
+   - Run `bun run lint`
    - Determine the appropriate `VITE_BASE_PATH` from `actions/configure-pages` (or repository variable `VITE_BASE_PATH`)
-   - Run `npm run build` (which also generates `dist/404.html` for client-side SPA routing)
+   - Run `bun run build` (which also generates `dist/404.html` for client-side SPA routing)
    - Deploy `./dist` to GitHub Pages.
 
 ## Setting the Correct Base Path (`VITE_BASE_PATH`)
@@ -119,7 +119,7 @@ Content is centralized so updates require minimal file edits:
 
 ## Troubleshooting
 
-- **404 on page refresh on GitHub Pages**: Verify that `npm run build` generated `dist/404.html` and that **Settings → Pages → Source** is set to **GitHub Actions** (not deploying from a raw branch folder).
-- **Broken CSS/JS/image paths on a project subpath**: Confirm `VITE_BASE_PATH` includes leading and trailing slashes (for example, `/shivshilp-website/`). `vite.config.ts` normalizes slashes automatically when `VITE_BASE_PATH` is set.
+- **404 on page refresh on GitHub Pages**: Verify that `bun run build` generated `dist/404.html` and that **Settings → Pages → Source** is set to **GitHub Actions** (not deploying from a raw branch folder).
+- **Broken CSS/JS/image paths on a project subpath**: Confirm `VITE_BASE_PATH` includes leading and trailing slashes (for example, `/Parag/`). `vite.config.ts` normalizes slashes automatically when `VITE_BASE_PATH` is set.
 - **Custom domain still loading subpath URLs**: Check **Settings → Secrets and variables → Actions → Variables** and ensure `VITE_BASE_PATH` is set to `/`, then re-run the workflow.
-- **TypeScript build errors**: Run `npm run lint` locally to inspect any type errors before pushing.
+- **TypeScript build errors**: Run `bun run lint` locally to inspect any type errors before pushing.
